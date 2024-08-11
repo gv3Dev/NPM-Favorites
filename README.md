@@ -14,6 +14,7 @@ NPM-Favorites is a Tampermonkey userscript that allows you to organize and keep 
 - **View Favorites**: Access your favorite packages from a sidebar menu.
 - **Custom Reminders**: Add descriptions to remind yourself why you saved a package.
 - **Organize Favorites**: Favorites are sorted by the date they were added.
+- **Search Favorites**: Quickly search through your favorite packages by name or description.
 
 ## Installation
 
@@ -24,7 +25,7 @@ NPM-Favorites is a Tampermonkey userscript that allows you to organize and keep 
    - Select "Create a new script..."
    - Replace the default script with the code from `NPM-Favorites` and save.
 
-3. **Visit npmjs.com**: Navigate to any npm package page. You should now see options to add packages to your favorites and view your saved list.
+3. **Visit npmjs.com**: Navigate to any npm package page. You should now see options to add packages to your favorites, view your saved list, and search through your favorites.
 
 ## How to Use
 
@@ -39,6 +40,9 @@ NPM-Favorites is a Tampermonkey userscript that allows you to organize and keep 
 - **Managing Favorites**:
   - Hover over a favorite package in the sidebar to remove it.
   - Click on the heart icon on any package page to toggle its favorite status.
+
+- **Searching Favorites**:
+  - Use the search bar in the sidebar to filter your favorite packages by name or description.
 
 ## Use Cases
 
