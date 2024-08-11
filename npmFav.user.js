@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NPM Favorites ❤
 // @namespace    http://tampermonkey.net/
-// @version      2024-08-10
+// @version      2024-08-11
 // @description  Will allow you to easily organize and sort packages you might want to use in the future
 // @author       GV3Dev
 // @match        https://www.npmjs.com/*
@@ -84,20 +84,43 @@ function openFavorites(evt) {
         menu.innerHTML = `
             <h2 style="width:100%; text-align:center;margin-bottom:0; padding-bottom:0;">NPM Favorites <span style="color:red">❤</span></h2>
             <p style="text-align:center;width:95%;">Your favorite packages, within reach!</p>
+            <div style="display:flex;justify-content:flex-start;align-items:center;flex-direction:row;background-color:rgba(0,0,0,0.04);padding:8px;padding-left:12px;border-radius:5px;width:90%;margin-top:5px;margin-bottom:10px;">
+              <svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" aria-hidden="true"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g stroke="#777777" stroke-width="1.3"><g><path d="M13.4044,7.0274 C13.4044,10.5494 10.5494,13.4044 7.0274,13.4044 C3.5054,13.4044 0.6504,10.5494 0.6504,7.0274 C0.6504,3.5054 3.5054,0.6504 7.0274,0.6504 C10.5494,0.6504 13.4044,3.5054 13.4044,7.0274 Z"></path><path d="M11.4913,11.4913 L17.8683,17.8683"></path></g></g></g></svg>
+              <input id="search-fav-npm" type="text" placeholder="Search favorites" style="outline:none;border:none;background-color:transparent; padding-left:10px; font-family: var(--code); font-size:12px;">
+            </div>
             <div id="fav-contain" style="margin-top:5px; width:95%; height:fit-content; max-height:85%; overflow:hidden; overflow-y:auto; padding:5px; margin-bottom:10px;"></div>
             <p style="padding:0;margin:0;text-align:center;margin-top:15px;margin-bottom:20px;font-size:13px;opacity:0.85;">Brought to you by <a href="https://github.com/gv3dev" target="_blank" style="font-weight:bold; color:red; cursor:pointer; text-decoration:none;">GV3Dev</a<p>
         `;
         document.body.appendChild(menu);
         $(menu).draggable();
         injectScrollbarCSS();
+        const searchBar = menu.querySelector("#search-fav-npm");
         const toBeFilled = document.querySelector("#fav-contain");
         populateFavorites(toBeFilled);
+        searchBar.addEventListener("keyup", (evt)=>{handleSearch(evt, toBeFilled)})
     }
 }
 
-function populateFavorites(menu) {
-    menu.innerHTML = '';
+
+function handleSearch(evt, toBeFilled) {
+    const searchQuery = evt.target.value.toLowerCase();
     const favorites = GM_listValues();
+    if (searchQuery === '') {
+        populateFavorites(toBeFilled);
+    } else {
+        const filteredFavorites = favorites.filter(packageName => {
+            const packageData = GM_getValue(packageName);
+            return packageName.toLowerCase().includes(searchQuery) ||
+                (packageData.description && packageData.description.toLowerCase().includes(searchQuery));
+        });
+        populateFavorites(toBeFilled, filteredFavorites);
+    }
+}
+
+function populateFavorites(menu, filteredFavorites = null) {
+    menu.innerHTML = '';
+    const favorites = filteredFavorites || GM_listValues();
+
     if (favorites.length > 0) {
         const sortedFavorites = favorites
         .map(packageName => {
@@ -132,7 +155,7 @@ function populateFavorites(menu) {
                     <h2 style="margin: 0; font-size: 16px;">${name}</h2>
                     <span title="remove from favorites" style="cursor: pointer; transition: color 0.3s; font-size: 18px; padding: 2px 5px;" class="removeFavorite">&times;</span>
                 </span>
-                <p style="margin: 0; font-size: 14px; color: gray; text-align:left;">${data.description.length>0 ? data.description : "For use in future projects."}</p>
+                <p style="margin: 0; font-size: 14px; color: gray; text-align:left;">${data.description.length > 0 ? data.description : "For use in future projects."}</p>
             `;
             item.addEventListener('mouseover', () => {
                 item.style.backgroundColor = '#f5f5f5';
@@ -163,8 +186,6 @@ function populateFavorites(menu) {
         menu.innerHTML = `<p style="text-align:center;">You have no favorites</p>`;
     }
 }
-
-
 
 
 function toggleFavorite(packageName, btn) {
