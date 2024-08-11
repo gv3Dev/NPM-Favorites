@@ -2,7 +2,7 @@
 
 **Easily organize and access your favorite npm packages with this tool. Essential for saving packages for later projects.**
 
-<img src="https://github.com/gv3Dev/NPM-Favorites/blob/main/npmFavPic.png?raw=true"/>
+<img src="https://github.com/gv3Dev/NPM-Favorites/blob/main/npmFavDisplay.png?raw=true"/>
 
 ## Overview
 
