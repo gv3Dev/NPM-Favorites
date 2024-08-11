@@ -2,6 +2,8 @@
 
 **Easily organize and access your favorite npm packages with this tool. Essential for saving packages for later projects.**
 
+<img src="https://github.com/gv3Dev/NPM-Favorites/blob/main/npmFav.png?raw=true"/>
+
 ## Overview
 
 NPM-Favorites is a Tampermonkey userscript that allows you to organize and keep track of npm packages you may want to use in future projects. With this tool, you can easily add packages to your favorites list, view them in a dedicated sidebar, and quickly access package details from the npm website.
